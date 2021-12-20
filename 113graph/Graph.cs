@@ -117,7 +117,7 @@ namespace _113graph
     public string RegenerateGraph (string par, string expr)
     {
       // !!!{{ TODO: add graph data regeneration code here
-
+      // for the `expr` polynomial is expected
       if (expr == expression &&
           par == param)
         return null;                // nothing has changed => nothing to do..
