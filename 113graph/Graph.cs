@@ -117,12 +117,14 @@ namespace _113graph
     public string RegenerateGraph (string par, string expr)
     {
       // !!!{{ TODO: add graph data regeneration code here
-      // for the `expr` polynomial is expected
+      
+      // for the `expr` polynomial of x and z is expected
+      // initialization is from 122 to 147 and does not need to be edited; there's a debug checkbox in the form; RGB are xyz accordingly
       if (expr == expression &&
           par == param)
         return null;                // nothing has changed => nothing to do..
 
-      double xMin = -1.0, xMax = 1.0, yMin = -1.0, yMax = 1.0;
+      double xMin = -1.0, xMax = 1.0, yMin = -1.0, yMax = 1.0; //yMin and yMax should be technically z
 
       //------------------------------------------------------------------
       // Input text params (form).
