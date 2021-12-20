@@ -152,7 +152,7 @@ namespace _113graph
 
       //------------------------------------------------------------------
       // Expression evaluation  - THIS HAS TO BE CHANGED!
-
+      // ++how to connect the vertices into triangles?
       double x = -0.5, z = -0.5;
       Expression e = null;
       double result;
@@ -178,7 +178,7 @@ namespace _113graph
 
       //------------------------------------------------------------------
       // Data for VBO.
-
+      // kinds of data for each vertex is pushed to GPU
       // This has to be in sync with the actual buffer filling loop (see the unsafe
       // block below)!
       haveTexture = false;
@@ -193,19 +193,19 @@ namespace _113graph
       if (haveNormals)
         stride += Vector3.SizeInBytes;
 
-      long newVboSize = stride * 4;     // pilot .. four vertices
+      long newVboSize = stride * 4;     // pilot .. four vertices //++ so for our 3D case, we push all the vertices of the function at once?
       vertices = 6;                     // pilot .. six indices
-      long newIndexSize = sizeof(uint) * vertices;
+      long newIndexSize = sizeof(uint) * vertices; // for 3D, # of triangles * 3 will be the number we need
 
       // Vertex array: [texture:2D] [color:3D] [normal:3D] coordinate:3D
       GL.BindBuffer(BufferTarget.ArrayBuffer, VBOid[0]);
-      if (newVboSize != VBOlen[0])
+      if (newVboSize != VBOlen[0]) //may enter the if part if expr is changed
       {
         VBOlen[0] = newVboSize;
-        GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)VBOlen[0], IntPtr.Zero, BufferUsageHint.DynamicDraw);
+        GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)VBOlen[0], IntPtr.Zero, BufferUsageHint.DynamicDraw); // just push zeroes to the buffer
       }
 
-      IntPtr videoMemoryPtr = GL.MapBuffer(BufferTarget.ArrayBuffer, BufferAccess.WriteOnly);
+      IntPtr videoMemoryPtr = GL.MapBuffer(BufferTarget.ArrayBuffer, BufferAccess.WriteOnly); // get pointer to the buffer of all zeroes
       unsafe
       {
         float* ptr = (float*)videoMemoryPtr.ToPointer();
@@ -214,7 +214,10 @@ namespace _113graph
         float r = 0.1f;
         float g = 0.9f;
         float b = 0.7f;
-
+        
+        //++ we need to both push vertices and their indexes of triangles?
+        //++ there's an alternative to pushing list<vec3> and list<uint>?
+        
         // [s t] [R G B] [N_x N_y N_z] x y z
 
         // Vertex[0]
@@ -276,6 +279,7 @@ namespace _113graph
         ptr[3] = 2;
         ptr[4] = 1;
         ptr[5] = 3;
+        // if you can finish here you finish the basic solution
       }
       GL.UnmapBuffer(BufferTarget.ElementArrayBuffer);
       GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
@@ -353,7 +357,8 @@ namespace _113graph
     int GenerateTexture ()
     {
       // !!! TODO: change this part if you want, return 0 if texture is not used.
-
+      //++ can you please talk again about this?
+      
       // Generated (procedural) texture.
       const int TEX_SIZE = 128;
       const int TEX_CHECKER_SIZE = 8;
@@ -600,7 +605,7 @@ namespace _113graph
         // Draw!
 
         // !!!{{ CHANGE THIS PART if you want to add axes, legend, etc...
-
+        // ++shading is also done here?
         // Triangle part of the scene.
         // Draw total 'vertices' vertices from the beginning of the index-buffer,
         // that gives us 'vertices/3' triangles.
